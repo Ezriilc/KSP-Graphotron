@@ -4,6 +4,7 @@ using System.Linq;
 using System.Collections.Generic;
 using UnityEngine;
 
+
 namespace olexlib
 {
 	public class ModuleEnviroSensorPlotter : PartModule
@@ -218,6 +219,10 @@ namespace olexlib
 			isPlotting = !isPlotting;
 		}
 
+		private void OnGUI()
+		{
+			DrawGUI();
+		}
 		public override void OnStart (StartState state)
 		{
 			base.OnStart (state);
@@ -225,7 +230,7 @@ namespace olexlib
 			if (state == StartState.Editor)
 				return;
 
-			RenderingManager.AddToPostDrawQueue (3, DrawGUI);
+			//RenderingManager.AddToPostDrawQueue (3, DrawGUI);
 
 			lastObservedStage = vessel.currentStage;
 
