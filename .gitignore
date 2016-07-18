@@ -7,8 +7,11 @@
 
 # User-specific files
 *.suo
-*.user
+*.sln
 *.sln.docstates
+*.csproj
+*.user
+*.userprefs
 
 # Build results
 [Dd]ebug/
