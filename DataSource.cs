@@ -4,8 +4,7 @@ using System.Linq;
 using System.Collections.Generic;
 using UnityEngine;
 
-
-namespace olexlib
+namespace Graphotron
 {
 	public abstract class DataSource
 	{

@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using UnityEngine;
 
-namespace olexlib
+namespace Graphotron
 {
 	public class HybridRocketModule : PartModule
 	{
