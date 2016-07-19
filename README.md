@@ -4,7 +4,7 @@ The Graphotron is a part and a plugin for KSP used to plot sensor output and fli
 
 Changelog
 ---------
-v0.3: Made compatible with KSP 1.1.2
+v0.4: Made compatible with KSP 1.1.2
 
 v0.3: Made compatible with KSP 1.0
 
