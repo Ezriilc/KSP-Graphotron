@@ -17,6 +17,7 @@ DTAR*/
 # Build results
 [Dd]ebug/
 [Rr]elease/
+x64/
 *_i.c
 *_p.c
 *.ilk
@@ -32,7 +33,9 @@ DTAR*/
 *.tli
 *.tlh
 *.tmp
+*.log
 *.vspscc
+*.vssscc
 .builds
 *.dotCover
 .vs/

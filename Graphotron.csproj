@@ -67,11 +67,12 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Source\AssemblyInfo.cs" />
-    <Compile Include="Source\HybridRocketEngine.cs" />
-    <Compile Include="Source\ModuleEnviroSensorPlotter.cs" />
-    <Compile Include="Source\DataSource.cs" />
-    <Compile Include="Source\FontManager.cs" />
+    <Compile Include="Source\*" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Parts\*\$(AssemblyName)\$(AssemblyName).cfg" />
+    <None Include="$(AssemblyName).version" />
+    <None Include="README.md" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <Target Name="AfterBuild">
