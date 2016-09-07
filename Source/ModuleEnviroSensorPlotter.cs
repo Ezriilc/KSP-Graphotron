@@ -252,10 +252,13 @@ namespace Graphotron
 
 			// add resource data sources
 			List<string> resourceNames = new List<string> ();
-			foreach (Part p in vessel.parts) {
-				foreach (PartResource pr in p.Resources) {
-					if (!resourceNames.Contains (pr.resourceName))
-						resourceNames.Add (pr.resourceName);
+			foreach (Part part in vessel.parts) {
+                int resourceCount = part.Resources.Count;
+                for (int i = 0; i < resourceCount; ++i)
+                {
+                    PartResource resource = part.Resources[i];
+                    if (!resourceNames.Contains (part.Resources[i].resourceName))
+						resourceNames.Add (resource.resourceName);
 				}
 			}
 			resourceNames.Sort ();
