@@ -9,7 +9,10 @@ namespace Graphotron
 {
 	public class ModuleEnviroSensorPlotter : PartModule
 	{
-		[KSPField]
+        private string exportFolder = "Screenshots/Graphotron"; // Relative to KSP.exe. Forward slashes ("/") only - that works for both Linux and MS-Windows.
+        private string exportTimeFormat = "yyyyMMdd-HHmmss"; // DateTime format for filenames: [save name]_[vessel name]_[DateTime format].[ext]
+
+        [KSPField]
 		private bool isWindowShownMain = false;
 
 		[KSPField]
@@ -363,7 +366,7 @@ namespace Graphotron
 
 		private void renderText (string text, int x, int y, Color color)
 		{
-			// rendertron 2000
+			// rendertron
 			for (int c = 0; c < text.Length; c++) {
 				int cx = x + c * (getFontWidth()+1);
 				for (int p = 0; p < getFontWidth() * getFontHeight(); p++) {
@@ -378,10 +381,15 @@ namespace Graphotron
 
 		void CSVExport ()
 		{
-			var csvfile = KSP.IO.File.CreateText<ModuleEnviroSensorPlotter>(DateTime.Now.ToString ("yyyy-MM-dd hhmmss") + ".csv", null);
-			
-			// output csv header and prefetch data into arrays
-			string header = "Data point";
+            var fileNameString = HighLogic.CurrentGame.Title + "_" + vessel.vesselName + "_" + DateTime.Now.ToString(exportTimeFormat) + ".csv";
+            var dirPathString = System.IO.Path.Combine(KSPUtil.ApplicationRootPath, exportFolder);
+            if ( !System.IO.Directory.Exists(dirPathString) ) {
+                System.IO.Directory.CreateDirectory(dirPathString);
+            }
+            var filePathNameString = System.IO.Path.Combine(dirPathString, fileNameString);
+
+            // output csv header and prefetch data into arrays
+            string header = "Data point";
 			int exportDataPoints = dataPoints;
 			Dictionary<int, float[]> arrayData = new Dictionary<int, float[]>();
 			foreach (DataSource source in sources) {
@@ -393,33 +401,48 @@ namespace Graphotron
 				if (arrayData[sensorID].Length < exportDataPoints)
 					exportDataPoints = arrayData[sensorID].Length;
 			}
-			header += "\n";
-			csvfile.Write(header);
-			
-			// output data
-			for (int i = 0; i < exportDataPoints; i++) {
-				string line = i.ToString();
-				foreach (DataSource source in sources) {
-					if (!source.isActive)
-						continue;
-					int sensorID = source.GetHashCode();
-					line += "\t" + arrayData[sensorID][i].ToString();
-				}
-				line += "\n";
-				csvfile.Write(line);
-			}
 
-			csvfile.Close();
+            using (System.IO.StreamWriter stream = new System.IO.StreamWriter(filePathNameString))
+            {
+                stream.WriteLine(header);
+                // output data
+                for (int i = 0; i < exportDataPoints; i++)
+                {
+                    string line = i.ToString();
+                    foreach (DataSource source in sources)
+                    {
+                        if (!source.isActive)
+                            continue;
+                        int sensorID = source.GetHashCode();
+                        line += "\t" + arrayData[sensorID][i].ToString();
+                    }
+                    stream.WriteLine(line);
+                }
+            }
 		}
-		
-		private void DrawGUI ()
+
+        void PNGExport()
+        {
+            var fileNameString = HighLogic.CurrentGame.Title + "_" + vessel.vesselName + "_" + DateTime.Now.ToString(exportTimeFormat) + ".png";
+            var dirPathString = System.IO.Path.Combine(KSPUtil.ApplicationRootPath, exportFolder);
+            if (!System.IO.Directory.Exists(dirPathString))
+            {
+                System.IO.Directory.CreateDirectory(dirPathString);
+            }
+            var filePathNameString = System.IO.Path.Combine(dirPathString, fileNameString);
+
+            var pbytes = plot.EncodeToPNG();
+            System.IO.File.WriteAllBytes(filePathNameString, pbytes);
+        }
+
+        private void DrawGUI ()
 		{
-			if (isWindowShownMain && this.part.State == PartStates.ACTIVE) {
+			if (isWindowShownMain && part.State == PartStates.ACTIVE) {
 				GUI.skin = HighLogic.Skin;
 				windowPositionMain = GUILayout.Window (423595, 
 			                                  windowPositionMain, 
 			                                  DrawWindowMain, 
-			                                  "Graphotron 2000", 
+			                                  "Graphotron", 
 			                                  GUILayout.Width (getChartWidth() + 4),
 				                              GUILayout.Height(chartHeight + 100));
 				if (isWindowShownSources) {
@@ -470,10 +493,8 @@ namespace Graphotron
 
 			GUILayout.BeginHorizontal ();
 			if (GUILayout.Button ("Save to PNG", GUILayout.Width (halfWidth))) {
-				var pbytes = plot.EncodeToPNG ();
-				KSP.IO.File.WriteAllBytes<ModuleEnviroSensorPlotter> (pbytes, DateTime.Now.ToString ("yyyy-MM-dd hhmmss") + ".png", null);
+                this.PNGExport();
 			}
-
 			if (GUILayout.Button ("Save to CSV", GUILayout.Width (halfWidth))) {
 				this.CSVExport();
 			}
