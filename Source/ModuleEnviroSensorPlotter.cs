@@ -492,15 +492,19 @@ namespace Graphotron
 			GUILayout.EndHorizontal ();
 
 			GUILayout.BeginHorizontal ();
-			if (GUILayout.Button ("Save to PNG", GUILayout.Width (halfWidth))) {
+            if (GUILayout.Button("Save to CSV", GUILayout.Width(halfWidth))) {
+                this.CSVExport();
+            }
+            if (GUILayout.Button ("Save to PNG", GUILayout.Width (halfWidth))) {
                 this.PNGExport();
 			}
-			if (GUILayout.Button ("Save to CSV", GUILayout.Width (halfWidth))) {
-				this.CSVExport();
-			}
-			GUILayout.EndHorizontal ();
+            GUILayout.EndHorizontal ();
 
-			GUILayout.EndVertical();
+            GUILayout.BeginHorizontal();
+            GUILayout.Label("Files go to: " + exportFolder);
+            GUILayout.EndHorizontal();
+
+            GUILayout.EndVertical();
 
 			GUI.DragWindow(new Rect(0, 0, getChartWidth() + 4, 60));
 		}
