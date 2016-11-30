@@ -1,4 +1,4 @@
-Graphotron v0.3
+Graphotron
 ======================
 The Graphotron is a part and a plugin for KSP used to plot sensor output and flight information.
 
