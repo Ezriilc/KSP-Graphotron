@@ -4,6 +4,7 @@ The Graphotron is a part and a plugin for KSP used to plot sensor output and fli
 
 Changelog
 ---------
+v0.1.2: Added vertical speed, acceleration and g-force to sources.
 v0.4.1: Made compatible with KSP 1.2
 - Moved output files to Screenshots/Graphotron/
 
