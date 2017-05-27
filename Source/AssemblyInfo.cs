@@ -11,7 +11,7 @@ using System.Reflection;
 [assembly: AssemblyCopyright("Olexandr")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
-[assembly: AssemblyVersion("0.4.1")]
+[assembly: AssemblyVersion("0.4.3")]
 
 // The assembly version has the format "{Major}.{Minor}.{Build}.{Revision}".
 // The form "{Major}.{Minor}.*" will automatically update the build and revision,

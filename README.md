@@ -6,6 +6,8 @@ Pull requests are always welcome, as is any other input.  In fact, we rely on co
 
 Changelog
 ---------
+v0.4.3: Recompiled for KSP 1.3
+
 v0.4.2: Added vertical speed, acceleration and g-force to sources.
 
 v0.4.1: Made compatible with KSP 1.2
