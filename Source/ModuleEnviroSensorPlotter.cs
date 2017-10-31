@@ -243,6 +243,7 @@ namespace Graphotron
 			sources.Add (new VesselInfoSource ("Flight data", "Vertical Speed",     		() => (float)vessel.verticalSpeed));
 			sources.Add (new VesselInfoSource ("Flight data", "Altitude (surface)", 		() => vessel.heightFromTerrain));
 			sources.Add (new VesselInfoSource ("Flight data", "Altitude (sea level)",	() => (float)vessel.altitude));
+			sources.Add (new VesselInfoSource ("Flight data", "Altitude (terrain)",   () => (float)(vessel.altitude - vessel.heightFromTerrain)));	
 			sources.Add (new VesselInfoSource ("Flight data", "Acceleration",	() => (float)vessel.acceleration.magnitude));
 			sources.Add (new VesselInfoSource ("Flight data", "G-Force (immediate)",	() => (float)vessel.geeForce_immediate));
 			sources.Add (new VesselInfoSource ("Flight data", "Dynamic pressure (q)", 		
