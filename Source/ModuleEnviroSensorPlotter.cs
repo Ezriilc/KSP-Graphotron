@@ -238,15 +238,15 @@ namespace Graphotron
 			lastObservedStage = vessel.currentStage;
 
 			// add basic sensors to list
-			sources.Add (new VesselInfoSource ("Flight data", "Velocity (surface)", 		() => (float)vessel.srf_velocity.magnitude));
-			sources.Add (new VesselInfoSource ("Flight data", "Velocity (orbit)", 			() => (float)vessel.obt_velocity.magnitude));
-			sources.Add (new VesselInfoSource ("Flight data", "Vertical Speed",     		() => (float)vessel.verticalSpeed));
-			sources.Add (new VesselInfoSource ("Flight data", "Altitude (surface)", 		() => vessel.heightFromTerrain));
-			sources.Add (new VesselInfoSource ("Flight data", "Altitude (sea level)",	() => (float)vessel.altitude));
-			sources.Add (new VesselInfoSource ("Flight data", "Acceleration",	() => (float)vessel.acceleration.magnitude));
-			sources.Add (new VesselInfoSource ("Flight data", "G-Force (immediate)",	() => (float)vessel.geeForce_immediate));
-			sources.Add (new VesselInfoSource ("Flight data", "Dynamic pressure (q)", 		
-			                                   () => (float)(vessel.srf_velocity.magnitude * vessel.srf_velocity.magnitude * vessel.atmDensity * 0.5)));
+			sources.Add (new VesselInfoSource ("Flight data", "Velocity (surface)", () => (float)vessel.srf_velocity.magnitude));
+			sources.Add (new VesselInfoSource ("Flight data", "Velocity (orbit)",   () => (float)vessel.obt_velocity.magnitude));
+			sources.Add (new VesselInfoSource ("Flight data", "Vertical Speed",     () => (float)vessel.verticalSpeed));
+			sources.Add (new VesselInfoSource ("Flight data", "Altitude (sea level)",   () => (float)vessel.altitude));
+            sources.Add (new VesselInfoSource ("Flight data", "Altitude (surface)", () => (float)vessel.heightFromTerrain));
+			sources.Add (new VesselInfoSource ("Flight data", "Altitude (terrain)", () => (float)(vessel.altitude - vessel.heightFromTerrain)));
+			sources.Add (new VesselInfoSource ("Flight data", "Acceleration",       () => (float)vessel.acceleration.magnitude));
+			sources.Add (new VesselInfoSource ("Flight data", "G-Force (immediate)",() => (float)vessel.geeForce_immediate));
+			sources.Add (new VesselInfoSource ("Flight data", "Dynamic pressure (q)",   () => (float)(vessel.srf_velocity.magnitude * vessel.srf_velocity.magnitude * vessel.atmDensity * 0.5)));
 
 			sources.Add (new VesselInfoSource ("Flight data", "Total vehicle mass",			() => (float)vessel.GetTotalMass()));
 			sources.Add (new VesselInfoSource ("Flight data", "Angle of attack",			() => Vector3.Angle(vessel.transform.up, vessel.srf_velocity)));
