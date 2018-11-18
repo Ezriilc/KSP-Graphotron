@@ -4,8 +4,7 @@ using System.Linq;
 using System.Collections.Generic;
 using UnityEngine;
 
-
-namespace olexlib
+namespace Graphotron
 {
 	public abstract class DataSource
 	{
@@ -110,10 +109,13 @@ namespace olexlib
 		public override void fetchData ()
 		{
 			float total = 0f;
-			foreach (Part p in vessel.parts) {
-				foreach (PartResource pr in p.Resources) {
-					if (pr.resourceName == name)
-						total += (float)pr.amount;
+			foreach (Part part in vessel.parts) {
+                int resourceCount = part.Resources.Count;
+                for (int i = 0; i < resourceCount; ++i)
+                {
+                    PartResource resource = part.Resources[i];
+                    if (resource.resourceName == name)
+						total += (float)resource.amount;
 				}
 			}
 			data.AddLast(total);

@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using UnityEngine;
 
-namespace olexlib
+namespace Graphotron
 {
 	public class HybridRocketModule : PartModule
 	{
@@ -38,7 +38,7 @@ namespace olexlib
 				jet = this.part.Modules.OfType<ModuleEngines> ().Where (m => m.propellants.Any (p => p.name == "IntakeAir")).First ();
 				rocket = this.part.Modules.OfType<ModuleEngines> ().Where (m => m.propellants.Any (p => p.name == "Oxidizer")).First ();
 			} catch (InvalidOperationException e) {
-				MonoBehaviour.print ("HybridRocketModule error: jet or rocket engine partmodules not found, check part configuration");
+				MonoBehaviour.print ("HybridRocketModule error: jet or rocket engine partmodules not found, check part configuration. Exception: "+e);
 			}
 
 			MonoBehaviour.print("HybridRocketModule initialized");

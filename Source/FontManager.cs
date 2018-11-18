@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
 
-namespace olexlib
+namespace Graphotron
 {
 	static class FontManager
 	{

@@ -5,12 +5,15 @@ using System.Collections.Generic;
 using UnityEngine;
 
 
-namespace olexlib
+namespace Graphotron
 {
 	public class ModuleEnviroSensorPlotter : PartModule
 	{
-		[KSPField]
-		private bool isWindowShownMain = false;
+        private string exportFolder = "Screenshots/Graphotron"; // Relative to KSP.exe. Forward slashes ("/") only - that works for both Linux and MS-Windows.
+        private string exportTimeFormat = "yyyyMMdd-HHmmss"; // DateTime format for filenames: [save name]_[vessel name]_[DateTime format].[ext]
+
+        [KSPField]
+		public bool isWindowShownMain = false;
 
 		[KSPField]
 		private bool isWindowShownSources = false;
@@ -221,8 +224,9 @@ namespace olexlib
 
 		private void OnGUI()
 		{
-			DrawGUI();
+             DrawGUI();
 		}
+
 		public override void OnStart (StartState state)
 		{
 			base.OnStart (state);
@@ -235,12 +239,15 @@ namespace olexlib
 			lastObservedStage = vessel.currentStage;
 
 			// add basic sensors to list
-			sources.Add (new VesselInfoSource ("Flight data", "Velocity (surface)", 		() => (float)vessel.srf_velocity.magnitude));
-			sources.Add (new VesselInfoSource ("Flight data", "Velocity (orbit)", 			() => (float)vessel.obt_velocity.magnitude));
-			sources.Add (new VesselInfoSource ("Flight data", "Altitude (surface)", 		() => vessel.heightFromTerrain));
-			sources.Add (new VesselInfoSource ("Flight data", "Altitude (above sea level)",	() => (float)vessel.altitude));
-			sources.Add (new VesselInfoSource ("Flight data", "Dynamic pressure (q)", 		
-			                                   () => (float)(vessel.srf_velocity.magnitude * vessel.srf_velocity.magnitude * vessel.atmDensity * 0.5)));
+			sources.Add (new VesselInfoSource ("Flight data", "Velocity (surface)", () => (float)vessel.srf_velocity.magnitude));
+			sources.Add (new VesselInfoSource ("Flight data", "Velocity (orbit)",   () => (float)vessel.obt_velocity.magnitude));
+			sources.Add (new VesselInfoSource ("Flight data", "Vertical Speed",     () => (float)vessel.verticalSpeed));
+			sources.Add (new VesselInfoSource ("Flight data", "Altitude (sea level)",   () => (float)vessel.altitude));
+            sources.Add (new VesselInfoSource ("Flight data", "Altitude (surface)", () => (float)vessel.heightFromTerrain));
+			sources.Add (new VesselInfoSource ("Flight data", "Altitude (terrain)", () => (float)(vessel.altitude - vessel.heightFromTerrain)));
+			sources.Add (new VesselInfoSource ("Flight data", "Acceleration",       () => (float)vessel.acceleration.magnitude));
+			sources.Add (new VesselInfoSource ("Flight data", "G-Force (immediate)",() => (float)vessel.geeForce_immediate));
+			sources.Add (new VesselInfoSource ("Flight data", "Dynamic pressure (q)",   () => (float)(vessel.srf_velocity.magnitude * vessel.srf_velocity.magnitude * vessel.atmDensity * 0.5)));
 
 			sources.Add (new VesselInfoSource ("Flight data", "Total vehicle mass",			() => (float)vessel.GetTotalMass()));
 			sources.Add (new VesselInfoSource ("Flight data", "Angle of attack",			() => Vector3.Angle(vessel.transform.up, vessel.srf_velocity)));
@@ -252,10 +259,13 @@ namespace olexlib
 
 			// add resource data sources
 			List<string> resourceNames = new List<string> ();
-			foreach (Part p in vessel.parts) {
-				foreach (PartResource pr in p.Resources) {
-					if (!resourceNames.Contains (pr.resourceName))
-						resourceNames.Add (pr.resourceName);
+			foreach (Part part in vessel.parts) {
+                int resourceCount = part.Resources.Count;
+                for (int i = 0; i < resourceCount; ++i)
+                {
+                    PartResource resource = part.Resources[i];
+                    if (!resourceNames.Contains (part.Resources[i].resourceName))
+						resourceNames.Add (resource.resourceName);
 				}
 			}
 			resourceNames.Sort ();
@@ -360,7 +370,7 @@ namespace olexlib
 
 		private void renderText (string text, int x, int y, Color color)
 		{
-			// rendertron 2000
+			// rendertron
 			for (int c = 0; c < text.Length; c++) {
 				int cx = x + c * (getFontWidth()+1);
 				for (int p = 0; p < getFontWidth() * getFontHeight(); p++) {
@@ -375,10 +385,15 @@ namespace olexlib
 
 		void CSVExport ()
 		{
-			var csvfile = KSP.IO.File.CreateText<ModuleEnviroSensorPlotter>(DateTime.Now.ToString ("yyyy-MM-dd hhmmss") + ".csv", null);
-			
-			// output csv header and prefetch data into arrays
-			string header = "Data point";
+            var fileNameString = HighLogic.CurrentGame.Title + "_" + vessel.vesselName + "_" + DateTime.Now.ToString(exportTimeFormat) + ".csv";
+            var dirPathString = System.IO.Path.Combine(KSPUtil.ApplicationRootPath, exportFolder);
+            if ( !System.IO.Directory.Exists(dirPathString) ) {
+                System.IO.Directory.CreateDirectory(dirPathString);
+            }
+            var filePathNameString = System.IO.Path.Combine(dirPathString, fileNameString);
+
+            // output csv header and prefetch data into arrays
+            string header = "Data point";
 			int exportDataPoints = dataPoints;
 			Dictionary<int, float[]> arrayData = new Dictionary<int, float[]>();
 			foreach (DataSource source in sources) {
@@ -390,33 +405,48 @@ namespace olexlib
 				if (arrayData[sensorID].Length < exportDataPoints)
 					exportDataPoints = arrayData[sensorID].Length;
 			}
-			header += "\n";
-			csvfile.Write(header);
-			
-			// output data
-			for (int i = 0; i < exportDataPoints; i++) {
-				string line = i.ToString();
-				foreach (DataSource source in sources) {
-					if (!source.isActive)
-						continue;
-					int sensorID = source.GetHashCode();
-					line += "\t" + arrayData[sensorID][i].ToString();
-				}
-				line += "\n";
-				csvfile.Write(line);
-			}
 
-			csvfile.Close();
+            using (System.IO.StreamWriter stream = new System.IO.StreamWriter(filePathNameString))
+            {
+                stream.WriteLine(header);
+                // output data
+                for (int i = 0; i < exportDataPoints; i++)
+                {
+                    string line = i.ToString();
+                    foreach (DataSource source in sources)
+                    {
+                        if (!source.isActive)
+                            continue;
+                        int sensorID = source.GetHashCode();
+                        line += "\t" + arrayData[sensorID][i].ToString();
+                    }
+                    stream.WriteLine(line);
+                }
+            }
 		}
-		
-		private void DrawGUI ()
+
+        void PNGExport()
+        {
+            var fileNameString = HighLogic.CurrentGame.Title + "_" + vessel.vesselName + "_" + DateTime.Now.ToString(exportTimeFormat) + ".png";
+            var dirPathString = System.IO.Path.Combine(KSPUtil.ApplicationRootPath, exportFolder);
+            if (!System.IO.Directory.Exists(dirPathString))
+            {
+                System.IO.Directory.CreateDirectory(dirPathString);
+            }
+            var filePathNameString = System.IO.Path.Combine(dirPathString, fileNameString);
+
+            var pbytes = plot.EncodeToPNG();
+            System.IO.File.WriteAllBytes(filePathNameString, pbytes);
+        }
+
+        private void DrawGUI ()
 		{
-			if (isWindowShownMain && this.part.State == PartStates.ACTIVE) {
+			if (isWindowShownMain && part.State == PartStates.ACTIVE) {
 				GUI.skin = HighLogic.Skin;
 				windowPositionMain = GUILayout.Window (423595, 
 			                                  windowPositionMain, 
 			                                  DrawWindowMain, 
-			                                  "Graphotron 2000", 
+			                                  "Graphotron", 
 			                                  GUILayout.Width (getChartWidth() + 4),
 				                              GUILayout.Height(chartHeight + 100));
 				if (isWindowShownSources) {
@@ -466,17 +496,19 @@ namespace olexlib
 			GUILayout.EndHorizontal ();
 
 			GUILayout.BeginHorizontal ();
-			if (GUILayout.Button ("Save to PNG", GUILayout.Width (halfWidth))) {
-				var pbytes = plot.EncodeToPNG ();
-				KSP.IO.File.WriteAllBytes<ModuleEnviroSensorPlotter> (pbytes, DateTime.Now.ToString ("yyyy-MM-dd hhmmss") + ".png", null);
+            if (GUILayout.Button("Save to CSV", GUILayout.Width(halfWidth))) {
+                this.CSVExport();
+            }
+            if (GUILayout.Button ("Save to PNG", GUILayout.Width (halfWidth))) {
+                this.PNGExport();
 			}
+            GUILayout.EndHorizontal ();
 
-			if (GUILayout.Button ("Save to CSV", GUILayout.Width (halfWidth))) {
-				this.CSVExport();
-			}
-			GUILayout.EndHorizontal ();
+            GUILayout.BeginHorizontal();
+            GUILayout.Label("Files go to: " + exportFolder);
+            GUILayout.EndHorizontal();
 
-			GUILayout.EndVertical();
+            GUILayout.EndVertical();
 
 			GUI.DragWindow(new Rect(0, 0, getChartWidth() + 4, 60));
 		}
