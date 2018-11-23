@@ -13,7 +13,7 @@ namespace Graphotron
         private string exportTimeFormat = "yyyyMMdd-HHmmss"; // DateTime format for filenames: [save name]_[vessel name]_[DateTime format].[ext]
 
         [KSPField]
-		private bool isWindowShownMain = false;
+		public bool isWindowShownMain = false;
 
 		[KSPField]
 		private bool isWindowShownSources = false;
@@ -224,8 +224,9 @@ namespace Graphotron
 
 		private void OnGUI()
 		{
-			DrawGUI();
+             DrawGUI();
 		}
+
 		public override void OnStart (StartState state)
 		{
 			base.OnStart (state);
