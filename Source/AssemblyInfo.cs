@@ -4,14 +4,13 @@ using System.Reflection;
 // Change them to the values specific to your project.
 
 [assembly: AssemblyTitle("Graphotron")]
-[assembly: AssemblyDescription("A plugin and part mod for Kerbal Space Program")]
-[assembly: AssemblyConfiguration("")]
+[assembly: AssemblyDescription("A plugin and part for Kerbal Space Program")]
 [assembly: AssemblyCompany("Kerbaltek")]
-[assembly: AssemblyProduct("")]
-[assembly: AssemblyCopyright("Olexandr")]
-[assembly: AssemblyTrademark("")]
+[assembly: AssemblyProduct("Graphotron")]
+[assembly: AssemblyCopyright("Copyright © 2015 Olexandr")]
+[assembly: AssemblyTrademark("Kerbaltek")]
 [assembly: AssemblyCulture("")]
-[assembly: AssemblyVersion("0.4.3")]
+[assembly: AssemblyVersion("1.5.1")]
 
 // The assembly version has the format "{Major}.{Minor}.{Build}.{Revision}".
 // The form "{Major}.{Minor}.*" will automatically update the build and revision,

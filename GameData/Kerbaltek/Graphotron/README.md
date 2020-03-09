@@ -2,12 +2,22 @@ Graphotron
 ======================
 A part and plugin for KSP used to plot sensor output and flight information.  Graphotron is proudly maintained by Kerbaltek.
 
-Please talk to us in the KSP forum thread:  http://forum.KerbalSpaceProgram.com/threads/119337
+Please talk to us on our site:  https://www.Kerbaltek.com/graphotron
+Or, on the KSP forum at the link on our site.
 
 Pull requests are always welcome, as is any other input.  In fact, we rely on contributions to keep our projects going.  Please feel free to contact us here, in the KSP forums, and on our website.
 
 Changelog
 ---------
+v1.5.1:
+    As always, big thanks to the community for this release, including LinuxGuruGamer and StoneBlue!
+    Removed old /Parts folder
+    Converted/resized .mbm to .dds
+    Cleaned up .cfg file formatting
+    Moved .dll location to /Plugins folder
+    Forked from LinuxGuruGamer's fork
+    Added LICENSE.txt (GPL 3)
+
 v0.4.4: Recompiled for KSP 1.5.1
 
 v0.4.3: Recompiled for KSP 1.3

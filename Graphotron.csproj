@@ -5,18 +5,22 @@
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProjectGuid>{438D01D6-2DBE-4390-B7D1-E072D69107E9}</ProjectGuid>
     <OutputType>Library</OutputType>
-    <RootNamespace>Graphotron</RootNamespace>
     <AssemblyName>Graphotron</AssemblyName>
+    <RootNamespace>$(AssemblyName)</RootNamespace>
     <MyFileName>$(AssemblyName).dll</MyFileName>
-    <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <ConsolePause>false</ConsolePause>
     <NoConfig>true</NoConfig>
     <NoStdLib>true</NoStdLib>
-    <KspInstallDir Condition=" '$(KspInstallDir)' == '' ">..\..\..\Games\Kerbal Space Program\KSP_win64</KspInstallDir>
-    <KspOutputPath>$(KspInstallDir)\GameData\Kerbaltek</KspOutputPath>
+    <!-- // This is for Ezriilc's IDE, please leave this comment here, but change the next uncommented line to your own KSP install directory.
+    <KspInstallDir Condition=" '$(KspInstallDir)' == '' ">C:\Games\KSP_win64</KspInstallDir>
+-->
+    <KspInstallDir Condition=" '$(KspInstallDir)' == '' ">C:\Games\KSP_win64</KspInstallDir>
+    <KspOutputPath>$(KspInstallDir)\GameData\Kerbaltek\Graphotron\Plugins</KspOutputPath>
     <KspLibPath>$(KspInstallDir)\KSP_x64_Data\Managed</KspLibPath>
+    <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -25,36 +29,31 @@
     <OutputPath>bin\Debug</OutputPath>
     <DefineConstants>DEBUG;</DefineConstants>
     <RunCodeAnalysis>false</RunCodeAnalysis>
+    <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <Optimize>true</Optimize>
     <OutputPath>bin\Release</OutputPath>
     <RunCodeAnalysis>false</RunCodeAnalysis>
+    <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Assembly-CSharp">
       <HintPath>$(KspLibPath)\Assembly-CSharp.dll</HintPath>
     </Reference>
-    <Reference Include="Assembly-CSharp-firstpass">
-      <HintPath>$(KspLibPath)\Assembly-CSharp-firstpass.dll</HintPath>
+    <Reference Include="mscorlib.dll" />
+    <Reference Include="System.dll" />
+    <Reference Include="UnityEngine.AnimationModule.dll">
+      <HintPath>$(KspLibPath)\UnityEngine.AnimationModule.dll</HintPath>
     </Reference>
-    <Reference Include="System" />
-    <Reference Include="System.Xml.Linq" />
-    <Reference Include="System.Data.Linq" />
-    <Reference Include="UnityEngine">
-      <HintPath>$(KspLibPath)\UnityEngine.dll</HintPath>
+    <Reference Include="UnityEngine.CoreModule.dll">
+      <HintPath>$(KspLibPath)\UnityEngine.CoreModule.dll</HintPath>
     </Reference>
-    <Reference Include="UnityEngine.UI">
-      <HintPath>$(KspLibPath)\UnityEngine.UI.dll</HintPath>
+    <Reference Include="UnityEngine.ImageConversionModule.dll">
+      <HintPath>$(KspLibPath)\UnityEngine.ImageConversionModule.dll</HintPath>
     </Reference>
-    <Reference Include="mscorlib">
-      <HintPath>$(KspLibPath)\mscorlib.dll</HintPath>
-    </Reference>
-    <Reference Include="System.Core">
-      <HintPath>$(KspLibPath)\System.Core.dll</HintPath>
-    </Reference>
-    <Reference Include="KSPAssets">
-      <HintPath>$(KspLibPath)\KSPAssets.dll</HintPath>
+    <Reference Include="UnityEngine.IMGUIModule.dll">
+      <HintPath>$(KspLibPath)\UnityEngine.IMGUIModule.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
