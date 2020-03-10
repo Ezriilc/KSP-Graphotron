@@ -11,11 +11,17 @@ Changelog
 ---------
 v1.5.1:
     As always, big thanks to the community for this release, including LinuxGuruGamer and StoneBlue!
+    
     Removed old /Parts folder
+    
     Converted/resized .mbm to .dds
+    
     Cleaned up .cfg file formatting
+    
     Moved .dll location to /Plugins folder
+    
     Forked from LinuxGuruGamer's fork
+    
     Added LICENSE.txt (GPL 3)
 
 v0.4.4: Recompiled for KSP 1.5.1
